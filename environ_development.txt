@@ -1,0 +1,13 @@
+# Some env vars for local development
+PORT = 9000
+
+# These data are not correct, you must replace them with others
+
+POSTGRES_URL = "postgres://bhdhkulz:2e6RiBcN2HpdIy9bGWvDSnkVH3NAUWw6@tyke.db.elephantsql.com/bhdhkulz"
+
+DB_ENGINE = "MySQL_Replica"
+DB_HOST = "localhost"
+DB_PORT = 26257
+DB_DATABASE = "patient_observation"
+DB_USERNAME = "user"
+DB_PASSWORD = "eGhsRtwew2fDvb4" 
