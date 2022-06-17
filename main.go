@@ -3,11 +3,10 @@ package main
 import (
     "log"
     "os"
-    _ "net/http"
+     
     _ "github.com/joho/godotenv"
     _ "github.com/lib/pq"
     _ "database/sql"
-
     _ "github.com/gin-gonic/gin"
 
     "gomorganexam/clean/adapters/in"
@@ -22,22 +21,22 @@ func main() {
 
     if (len(os.Args) == 2) {
         if (os.Args[1] == "minimal") {
-            log.Println(os.Args[1])
+          log.Println(os.Args[1])
 
-            err:= godotenv.Load(".environ_development")
+          err:= godotenv.Load(".environ_development")
 
-            if err != nil {
-                log.Fatalf("failed reading env file: %v", err)
-            }
+          if err != nil {
+              log.Fatalf("failed reading env file: %v", err)
+          }
 
-            db_info:= os.Getenv("POSTGRES_URL")
+          db_info:= os.Getenv("POSTGRES_URL")
 
-            db:= db.NewAdapter("postgres", db_info)
-            server:= in.NewServer()
+          db:= db.NewAdapter("postgres", db_info)
+          server:= in.NewServer()
 
-            // csv record
-            apisvc:= ports.NewAPIService(db, nil, server)
-            apisvc.Start(checkInitData(db))
+          // csv record
+          apisvc:= ports.NewAPIService(db, nil, server)
+          apisvc.Start(checkInitData(db))
  
         }
     }

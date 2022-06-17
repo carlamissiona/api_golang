@@ -6,14 +6,13 @@ import (
   "github.com/gin-gonic/gin"
   // "github.com/gorilla/sessions"
   // "gomorganexam/clean/adapters/out/db"
-)
+)  
 
 var Server *gin.Engine
 var StatusMsg = "Status Ok"
 type WebServerAdapter interface {
     CheckServer()
     Start()
-
 }
 
 

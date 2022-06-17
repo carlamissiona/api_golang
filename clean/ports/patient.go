@@ -5,7 +5,7 @@ import (
     "gomorganexam/clean/adapters/in"
     "gomorganexam/clean/adapters/out/db"
   
-    "github.com/gorilla/sessions"
+    _ "github.com/gorilla/sessions"
     "log"
     "os" 
     "encoding/csv"
@@ -35,9 +35,10 @@ func NewAPIService(data *db.Adapter, records[] byte, engine *in.WebAdapter)( *Se
  return InstanceAPI
 }
 func(svc *Service) Start(hasRecords bool) {
-
+    var s Service; s = *svc
     if !hasRecords {
-      data_todb(&svc.Server.Msg,  &svc)  
+      // data_todb(&s); *svc = s ;
+      // data_todb(&svc.Server.Msg, svc)
     }
     svc.Server.Start() 
 }
@@ -64,36 +65,28 @@ func(svc *Service) GetAllConfirmed(pagelimit int32) {
     log.Println("No Implementation")
 }
 
-func data_todb(m *string , api *Service) {
+func data_todb(api *Service) {
     
-	  session := sessions.Default(c)
-    
-  
-  
-  
+	  // session := sessions.Default(c)
     
     csvfile, err := os.Open("data.csv")
     if err != nil {
-        log.Printf("=>ERROR!! NO CSV FILE \n %v \n=>END OF ERROR!! NO CSV FILE " , err );  log.Printf("handl_err_readcsv m * %v",*m )
-        *m = "No Routes Created \nPls. Input CSV File To Continue."
+        log.Printf("=>ERROR!! NO CSV FILE \n %v \n=>END OF ERROR!! NO CSV FILE " , err );   
+        api.Server.Msg = "No Routes Created \nPls. Input CSV File To Continue."
+        handle_error_csv_file(&api)
+    }
      
-       
-     }
-
     // remember to close the file at the end of the program
     defer csvfile.Close()
- 
+  
     // read csv values using csv.Reader
     csv_reader := csv.NewReader(csvfile)
 
     data, err := csv_reader.ReadAll()
     if err != nil {
         log.Printf("=>ERROR!! CANT READ CSV FILE \n %v \n=>END OF ERROR!! NO CSV FILE " , err ); 
-        log.Println("handl_err_readcsv m", m )
-         
-        api.Server.HttpEngine.GET("/servererror" , func(c *gin.Context) {
-           c.String( 301 , *m )
-        })
+        handle_error_csv_read(&api)
+        
     }
     log.Println("API data")
     log.Printf("=>DEBUG!! API DATA")
@@ -101,4 +94,3 @@ func data_todb(m *string , api *Service) {
     log.Printf("=>END OF DEBUG!! API DATA")
 
 }
-  
