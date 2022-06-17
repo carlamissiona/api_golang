@@ -42,9 +42,7 @@ func(h *WebAdapter) Start() {
     h.HttpEngine.Run() 
 
 } 
-
-// type Handle func(http.ResponseWriter, *http.Request, Params) 
-
+ 
 func(h *WebAdapter) Route(route string, err_no int, http_hndl gin.HandlerFunc) {
 
     if(err_no == 0) {

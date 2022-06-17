@@ -47,7 +47,7 @@ func main() {
 
 
 func checkInitData(db_adapter * db.Adapter) bool {
-    // obs, err := db_adapter.Db.QueryRow(`SELECT Count(*) FROM tbl_countrypatient`).Scan(&count)
+   
     var count int32 = 0
     err:= db_adapter.Data.QueryRow(`SELECT Count(*) FROM covid_observations`).Scan(&count)
     if err != nil {

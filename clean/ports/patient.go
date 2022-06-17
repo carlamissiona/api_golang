@@ -7,8 +7,7 @@ import (
   
     "github.com/gorilla/sessions"
     "log"
-    "os"
-    "net/http"
+    "os" 
     "encoding/csv"
 )
 
@@ -40,9 +39,9 @@ func(svc *Service) Start(hasRecords bool) {
     if !hasRecords {
       data_todb(&svc.Server.Msg,  &svc)  
     }
-    svc.Server.Start()
+    svc.Server.Start() 
 }
-
+  
 func(svc *Service) GetTopConfirmed(observation_date string, max_result int32) {
     // svc.Database 
 
