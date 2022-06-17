@@ -1,26 +1,27 @@
 package ports
+
 import (
-   _ "github.com/gin-gonic/gin"
+   "github.com/gin-gonic/gin"
+    "net/http"
 
-  )
-
-
-//Errors
-
-func handle_api_top_confirmed(api *Service, date_observed, max_no ){
-  api.Server.Route.("/api/get/top" , func(c *gin.Context) {
-     c.String( 301 , api.Server.Msg  )
-  })
-}
-func handle_api_error(api *Service, err Error){
-  api.Server.Route.("/server-error" , func(c *gin.Context) {
-       c.String( 301 , api.Server.Msg  )
-  })
+)
+  
+    
+func handle_api_top_confirmed(api *Service, response string ){
+  api.Server.Route("/api/get/top" , 1000 , func(c *gin.Context) {
+     c.String( 301 , api.Server.Msg) }) 
 }
 
-func handle_error_csv_read(){
-   c.Redirect(301, "/server-error/")
+   
+func handle_api_error(api *Service, response string ){
+  api.Server.Route("/server-error" , 500 , func(c *gin.Context) {
+     c.String( 301 , api.Server.Msg) }) 
+}
+
+
+func handle_error_csv_read(){ 
+  http.RedirectHandler("/server-error/", 301)
 }
 func handle_error_csv_file(){
-   c.Redirect(301, "/server-error/")
+    http.RedirectHandler("/server-error/", 301)
 }

@@ -11,11 +11,11 @@ import (
     "encoding/csv"
 )
 
-
+ 
  
 type ServicePatientsAPI interface {
     GetTopConfirmed(observation_date string, max_result int32) domain.PatientObservation
-    GetAllConfirmed(pagelimit int32) domain.PatientObservation
+    GetAllRecovered(pagelimit int32) domain.PatientObservation
     StartSvc(hasRecords bool)
 }
 
@@ -37,7 +37,7 @@ func NewAPIService(data *db.Adapter, records[] byte, engine *in.WebAdapter)( *Se
 func(svc *Service) Start(hasRecords bool) {
     var s Service; s = *svc
     if !hasRecords {
-      // data_todb(&s); *svc = s ;
+      data_todb(&s); *svc = s ;
       // data_todb(&svc.Server.Msg, svc)
     }
     svc.Server.Start() 
@@ -45,6 +45,9 @@ func(svc *Service) Start(hasRecords bool) {
   
 func(svc *Service) GetTopConfirmed(observation_date string, max_result int32) {
     // svc.Database 
+   
+    // response
+   handle_api_top_confirmed(&svc, response)
 
 
 } 

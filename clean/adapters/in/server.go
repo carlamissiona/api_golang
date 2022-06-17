@@ -19,6 +19,7 @@ type WebServerAdapter interface {
 type WebAdapter struct {
     HttpEngine *gin.Engine
     Msg string
+    Response string
 }
 
 func NewServer()( *WebAdapter) {
@@ -37,12 +38,12 @@ func NewServer()( *WebAdapter) {
 
 }
 
-func(h *WebAdapter) Start() {
+func (h *WebAdapter)Start() {
     h.HttpEngine.Run() 
-
+ 
 } 
  
-func(h *WebAdapter) Route(route string, err_no int, http_hndl gin.HandlerFunc) {
+func (h *WebAdapter)Route(route string, err_no int, http_hndl gin.HandlerFunc) {
 
     if(err_no == 0) {
       
@@ -54,7 +55,7 @@ func(h *WebAdapter) Route(route string, err_no int, http_hndl gin.HandlerFunc) {
 
 }
 
-
+ 
 
 
 // err := db.QueryRow("SELECT COUNT(*) FROM main_table").Scan(&count)
@@ -64,3 +65,6 @@ func(h *WebAdapter) Route(route string, err_no int, http_hndl gin.HandlerFunc) {
 // default:
 //     fmt.Printf("Number of rows are %s\n", count)
 // }
+
+
+
