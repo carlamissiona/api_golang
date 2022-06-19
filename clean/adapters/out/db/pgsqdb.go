@@ -13,25 +13,27 @@ import (
 
 type DataAdapter interface {
     NewAdapter(driver_db, conn_str string)( *Adapter)
-    Desc_DB()                    *sql.DB
+    Desc_DB()                    string
     Query(sqlStatement string)   *sql.Rows
     Execute(sqlStatement string) *sql.Result
+    Connect_DB()              
 }
-
+ 
 type Adapter struct {
     Data  *sql.DB
     Driver string
+    ConnUrl string
 }
  
 var Database_Instance  *sql.DB
 
 func NewAdapter(driver_db, conn_str string)( *Adapter) {
-
+    
     Database_Instance, err := sql.Open(driver_db, conn_str)
     if err != nil {
         panic(err)
     }
-
+  
     defer Database_Instance.Close()
 
     err = Database_Instance.Ping()
@@ -42,33 +44,51 @@ func NewAdapter(driver_db, conn_str string)( *Adapter) {
 
     return &Adapter {
         Data: Database_Instance,
+      Driver: driver_db,
+      ConnUrl: conn_str,
     }
 
 }
 
-func (a *Adapter)Desc_DB() *sql.DB {
-    return Database_Instance
+func (a *Adapter)Desc_DB() string {
+    return "Database_Instance"
 
+}
+
+
+func (a *Adapter)Connect_DB() (error) {
+    var err error
+    a.Data , err = sql.Open(a.Driver, a.ConnUrl)
+    if err != nil {
+        return err
+    }
+    return nil
 }
  
 func (a *Adapter)Query(sqlStatement string) *sql.Rows {
     var rows  *sql.Rows = nil
-
-    // log.Println("Database_Instance")
-    // log.Println(Database_Instance)
-        // sqlStatement := `SELECT * FROM TBL_PATIENTS)`
-    rows, err := a.Data.Query(sqlStatement)
+    var err error
+     log.Printf("@Connection error -> \n %v", a.Connect_DB())
+    err = a.Data.Ping()
     if err != nil {
-        log.Println("error ->", err)
+  		log.Printf("Error In DB Connection: %v", err)
+  	
+    }
+  
+    rows, err = a.Data.Query(sqlStatement)
+    if err != nil {
+         log.Println("@Query error ->", err)
     }
     return rows
 }
 func(a *Adapter) Execute(sqlStatement string) sql.Result {
     var rows sql.Result = nil
         // sqlStatement := `SELECT * FROM TBL_PATIENTS)`
-    rows, err := a.Data.Exec(sqlStatement)
+    log.Printf("@Connection error -> \n %v", a.Connect_DB())
+    err := a.Data.Ping()
+    rows, err = a.Data.Exec(sqlStatement)
     if err != nil {
-        log.Println("error ->", err)
+        log.Println("@Execute error ->", err)
 
     }
     return rows
