@@ -2,7 +2,7 @@ package ports
 
 import (
    "github.com/gin-gonic/gin"
-    "net/http"
+   "net/http"
 
 )
   
@@ -20,7 +20,7 @@ func handle_api_error(api *Service, response string ){
 
 
 func handle_error_csv_read(){ 
-  http.RedirectHandler("/server-error/", 301)
+    http.RedirectHandler("/server-error/", 301)
 }
 func handle_error_csv_file(){
     http.RedirectHandler("/server-error/", 301)

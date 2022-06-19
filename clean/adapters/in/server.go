@@ -45,7 +45,7 @@ func (h *WebAdapter)Start() {
  
 func (h *WebAdapter)Route(route string, err_no int, http_hndl gin.HandlerFunc) {
 
-    if(err_no == 0) {
+    if(err_no == 1000) {
       
       h.HttpEngine.GET(route, http_hndl) 
     } else {
