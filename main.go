@@ -61,7 +61,7 @@ func checkInitData(db_adapter *db.Adapter) bool {
 	}
 
 	return true
-}
+} 
 
 func data_todb(db *db.Adapter) {
 
@@ -79,8 +79,15 @@ func data_todb(db *db.Adapter) {
 			 log.Printf("=>ERROR!!DB Copy Error %v", err)
 			// api.Server.Msg = "No Routes Created \nPls. Input CSV File To Continue."
 			// ports.handle_error_csv_file()
+
+      
+db.Execute(`INSERT INTO covid_observations (the_country_name, the_state_name,confirmed_no,deaths_no,recovered_no,observation_date) VALUES('Mainland China','Anhui',102,10,2,timestamp '2015-01-10 17:00:00' );`)
 		}
 	}
+
+
+db.Execute(`INSERT INTO covid_observations (the_country_name, the_state_name,confirmed_no,deaths_no,recovered_no,observation_date) VALUES('Mainland China','Anhui',102,10,2,timestamp '2015-01-10 17:00:00' );`)
+  
 	//  	log.Println("CSV NO ERROR CSV NO ERROR , ")
 	//    	// remember to close the file at the end of the program
 
