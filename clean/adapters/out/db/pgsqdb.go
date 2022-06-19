@@ -58,6 +58,7 @@ func (a *Adapter)Desc_DB() string {
 
 func (a *Adapter)Connect_DB() (error) {
     var err error
+    log.Printf("@Connection Connect_DB -> \n %v  %v", a.Driver , a.ConnUrl)
     a.Data , err = sql.Open(a.Driver, a.ConnUrl)
     if err != nil {
         return err
@@ -68,12 +69,18 @@ func (a *Adapter)Connect_DB() (error) {
 func (a *Adapter)Query(sqlStatement string) *sql.Rows {
     var rows  *sql.Rows = nil
     var err error
-     log.Printf("@Connection error -> \n %v", a.Connect_DB())
-    err = a.Data.Ping()
+    
+    err= a.Connect_DB()
     if err != nil {
-  		log.Printf("Error In DB Connection: %v", err)
-  	
+        log.Println("@ a.Connect_DB ->", err)
+       err = a.Data.Ping()
+        if err != nil {
+            log.Println("@DB Connection ping error ->", err)
+    
+        }
+
     }
+
   
     rows, err = a.Data.Query(sqlStatement)
     if err != nil {
@@ -83,13 +90,24 @@ func (a *Adapter)Query(sqlStatement string) *sql.Rows {
 }
 func(a *Adapter) Execute(sqlStatement string) sql.Result {
     var rows sql.Result = nil
-        // sqlStatement := `SELECT * FROM TBL_PATIENTS)`
-    log.Printf("@Connection error -> \n %v", a.Connect_DB())
-    err := a.Data.Ping()
+  
+    err:= a.Connect_DB()
+    if err != nil {
+        log.Println("@ a.Connect_DB ->", err)
+       err = a.Data.Ping()
+        if err != nil {
+            log.Println("@DB Connection ping error ->", err)
+    
+        }
+
+    }
+    
     rows, err = a.Data.Exec(sqlStatement)
     if err != nil {
         log.Println("@Execute error ->", err)
 
     }
+
+  
     return rows
 }

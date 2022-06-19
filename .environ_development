@@ -3,8 +3,8 @@ PORT = 9000
 
 # These data are not correct, you must replace them with others
 
-POSTGRES_URL = "postgres://bhdhkulz:2e6RiBcN2HpdIy9bGWvDSnkVH3NAUWw6@tyke.db.elephantsql.com/bhdhkulz"
- 
+POSTGRES_URL2 = "postgres://bhdhkulz:2e6RiBcN2HpdIy9bGWvDSnkVH3NAUWw6@tyke.db.elephantsql.com/bhdhkulz"
+POSTGRES_URL  = "postgresql://postgres:lTcU9LdNfCYCHInXvN77@containers-us-west-32.railway.app:6177/railway"
 DB_ENGINE = "MySQL_Replica"
 DB_HOST = "localhost"
 DB_PORT = 26257

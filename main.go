@@ -3,6 +3,9 @@ package main
 import (
     "log"
     "os"
+  "io"
+  
+	   "encoding/csv"
      
     _ "github.com/joho/godotenv"
     _ "github.com/lib/pq"
@@ -45,19 +48,134 @@ func main() {
 
 
 
-func checkInitData(db_adapter * db.Adapter) bool {
+func checkInitData(db_adapter *db.Adapter) bool {
    
-    var count int32 = 0
+    var count int32 = -1
+    db_adapter.Connect_DB()
     err:= db_adapter.Data.QueryRow(`SELECT Count(*) FROM covid_observations`).Scan(&count)
     if err != nil {
-        log.Println("=>ERROR!! Check PG DATABASE DATA")
-        log.Println(err)
-        log.Println("=>END OF ERROR!! Check PG DATABASE DATA")
+        log.Printf("=>ERROR!! Check Initial Data Error in Query DB, %v ", err)
         return false
     }
+    if (count == 0){
+      data_todb(db_adapter)
+      
+    }
 
-    log.Printf("=>DEBUG!! Number of rows are %s\n", count)
-    log.Printf("=>DEBUG!! Number of rows are %s\n", count)
 
     return true
 }
+ 
+
+func data_todb(db *db.Adapter) {
+
+	csvfile, err := os.Open("data.csv")
+	if err != nil {
+		log.Printf("=>ERROR!! NO CSV FILE \n %v \n=>END OF ERROR!! NO CSV FILE , %v ", err, csvfile)
+		// api.Server.Msg = "No Routes Created \nPls. Input CSV File To Continue."
+		// ports.handle_error_csv_file()
+	} else {
+ 	log.Println("CSV NO ERROR CSV NO ERROR , ")
+   	// remember to close the file at the end of the program
+	 defer csvfile.Close()
+  // read csv values using csv.Reader
+	 csv_reader := csv.NewReader(csvfile)
+     
+  // _ = csv.NewReader(csvfile)
+	// log.Println("API data")
+	// log.Printf("=>DEBUG!! API DATA")
+	// log.Println(data)
+	// log.Printf("=>END OF DEBUG!! API DATA")
+
+   
+    err:= db.Connect_DB()
+    if err != nil {
+        log.Println("@ a.Connect_DB ->", err)
+        err = db.Data.Ping()
+        if err != nil {
+            log.Println("@DB Connection ping error ->", err)
+    
+        }
+
+    }
+     csv_len, err := csv_reader.ReadAll()
+    if err != nil {
+        log.Println("Unknown lengrh of csv ")
+        // put logic here
+    }
+    csv_rows_length := len(csv_len)
+    log.Printf("rows lengthhhhhh each_record %v", csv_rows_length)
+     
+    
+       var sqlstring = "INSERT INTO covid_observations (the_serial_id, observation_date, the_state_name, the_country_name,confirmed_no,deaths_no,recovered_no) VALUES( "
+        
+            // db.Execute(`INSERT INTO covid_observations (the_serial_id, observation_date, the_state_name, the_country_name,confirmed_no,deaths_no,recovered_no)`+
+            //            `VALUES('` + Mainland China','Anhui',102,10,2,timestamp '2015-01-10 17:00:00' );`)
+log.Print(sqlstring)
+    var incr = 0 
+    
+    for {
+        each_record, err := csv_reader.Read()
+      	log.Printf("each_record %v", each_record)
+      
+        if err!=nil{
+            log.Println("@CSV Error End of File ->", err)
+             
+            break
+        }
+        sqlstring += ""
+        log.Println("Incr line no ", incr)
+        if ( 800 % incr != 0 || incr <= 2){
+           index := 0
+           for value := range each_record {
+                 if( index == 7 ){
+                    sqlstring +=  each_record[value] + " ) ,  \n"
+                    
+                  }
+                  if(index == 0 ||index == 5 || index == 6 ){
+                    sqlstring +=  each_record[value] + ", "
+                    
+                  }
+                  if(index == 1 ||index == 4  ){
+                      
+                     sqlstring += " timestamp '" + each_record[value] + "', "
+                  } 
+                  if(index == 2 ||index == 3  ){
+                     sqlstring += " '" + each_record[value] + "', "
+                  }
+                  if (err != nil || err == io.EOF ) {
+                  
+                    log.Printf("This is a record of matrix %s  %v", each_record[value] , incr)
+                
+                 }
+             index++
+           }
+         log.Print("sqlstring")    
+          log.Print(sqlstring)
+        }
+      incr++
+        
+   log.Print(sqlstring)
+    
+  }
+
+	// remember to close the file at the end of the program
+	// defer csvfile.Close()
+
+	// // // read csv values using csv.Reader
+	// // csv_reader := csv.NewReader(csvfile)
+ // _ = csv.NewReader(csvfile)
+	// log.Println("API data")
+	// log.Printf("=>DEBUG!! API DATA")
+	// log.Println(data)
+	// log.Printf("=>END OF DEBUG!! API DATA")
+	    
+  
+	db.Execute(`INSERT INTO covid_observations (the_country_name, the_state_name,confirmed_no,deaths_no,recovered_no,observation_date) VALUES('Mainland China','Anhui',102,10,2,timestamp '2015-01-10 17:00:00' );`)
+
+	log.Println("api.Data.Query(`Select * from covid_observations`)")
+log.Println(db.Query(`Select * from covid_observations`))
+
+} // error catche else
+
+  }
