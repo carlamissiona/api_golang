@@ -1,0 +1,1 @@
+INSERT INTO covid_observations (the_serial_id, observation_date, the_state_name, the_country_name,confirmed_no,deaths_no,recovered_no) VALUES( 
