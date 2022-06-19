@@ -59,7 +59,7 @@ func checkInitData(db_adapter *db.Adapter) bool {
     }
     if (count == 0){
          log.Printf("= data_todb data_todb ")
-      data_todb(db_adapter)
+      data_todb(&db_adapter) 
       
     }
 
