@@ -1,1 +1,9 @@
-INSERT INTO covid_observations (the_serial_id, observation_date, the_state_name, the_country_name,confirmed_no,deaths_no,recovered_no) VALUES( 
+	file, err := os.Create("data/b.txt")
+	if err != nil {
+		fmt.Println(err)
+	} else {
+	sqls:="HI hi hi"
+		file.WriteString(sqls)
+		fmt.Println("Done")
+	}
+	file.Close()
